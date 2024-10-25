@@ -1,3 +1,85 @@
+# Assignment
+This assignment is developed using Nodejs v18.18.0
+
+## Live Demo
+Use the link: [Live Demo Link](#) 
+
+## Steps
+To run the project, please use the following commands. Assuming Nodejs v18.18.0 is already installed. Server starts on port 8080.
+```
+1. npm install
+2. node index.js
+```
+
+To run the test cases
+```
+1. npm test
+```
+
+Please find the **postman collection** json in the location
+
+### Approach
+Went through calendly apis and payload and understood a user can set the availability according to
+- days 
+- Specific Date range (can be extended)
+- Holidays (can be extended)
+
+### Api endpoints
+- **POST /api/v1/availability** - To set availability of user
+- **GET /api/v1/availability/:userId** - To get availability of user 
+- **GET /api/v1/availability/overlap?user1=1&user2=2** - To find overlap between availability of two users 
+
+### Sample Payload
+```
+{
+    "userId": 2,
+    "rule": [
+        {
+            "type": "day",
+            "day": "monday",
+            "intervals": [
+                {
+                    "from": "09:00",
+                    "to": "12:00"
+                },
+                {
+                    "from": "14:00",
+                    "to": "14:15"
+                }
+            ]
+        },
+        {
+            "type": "day",
+            "day": "tuesday",
+            "intervals": [
+                {
+                    "from": "09:00",
+                    "to": "12:00"
+                },
+                {
+                    "from": "14:00",
+                    "to": "15:00"
+                }
+            ]
+        }
+    ]
+}
+```
+
+   
+## Assumptions
+- Storing the data right now in memory.
+- While comparing the schedules for two users, checking the overalap based on the availaabilty. Not taking into booked events/meeting for that particular user
+- Schedule comparison is being handled for local timezon
+- Need to add propoer data vaidation to check request payload
+
+
+
+
+
+   
+
+
 # Harbor Take Home Project
 
 Welcome to the Harbor take home project. We hope this is a good opportunity for you to showcase your skills.
