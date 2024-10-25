@@ -1,5 +1,5 @@
 # Assignment
-This assignment is developed using Nodejs v18.18.0
+This assignment is developed using **Nodejs v18.18.0**
 
 ## Live Demo
 Use the link: [Live Demo Link](#) 
@@ -16,13 +16,13 @@ To run the test cases
 1. npm test
 ```
 
-Please find the **postman collection** json in the location
+Please find the **postman collection** json in the file postman_collection.json
 
 ### Approach
 Went through calendly apis and payload and understood a user can set the availability according to
 - days 
-- Specific Date range (can be extended)
-- Holidays (can be extended)
+- Specific Date range 
+- Holidays
 
 ### Api endpoints
 - **POST /api/v1/availability** - To set availability of user
@@ -69,7 +69,8 @@ Went through calendly apis and payload and understood a user can set the availab
    
 ## Assumptions
 - Storing the data right now in memory.
-- While comparing the schedules for two users, checking the overalap based on the availaabilty. Not taking into booked events/meeting for that particular user
+- Setting the user availability based on the day. Can be extended to accomadate date range and holidays.
+- While comparing the schedules for two users, checking the overalap based on the availabilty. Not taking into booked events/meeting for that particular user
 - Schedule comparison is being handled for local timezon
 - Need to add propoer data vaidation to check request payload
 
