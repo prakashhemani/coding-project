@@ -1,0 +1,132 @@
+{
+    "collection": {
+      "info": {
+        "_postman_id": "ba219bb2-0908-4a31-80ba-a1baa64ca07b",
+        "name": "Assignment",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "updatedAt": "2024-10-25T03:34:45.000Z",
+        "createdAt": "2024-10-25T03:34:23.000Z",
+        "lastUpdatedBy": "21927355",
+        "uid": "21927355-ba219bb2-0908-4a31-80ba-a1baa64ca07b"
+      },
+      "item": [
+        {
+          "name": "Set Availability",
+          "id": "ddbc4a83-7715-4d78-a567-7f4a1967ca7b",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"userId\": 2,\n    \"rule\": [\n        {\n            \"type\": \"day\",\n            \"day\": \"monday\",\n            \"intervals\": [\n                {\n                    \"from\": \"09:00\",\n                    \"to\": \"12:00\"\n                },\n                {\n                    \"from\": \"14:00\",\n                    \"to\": \"15:00\"\n                }\n            ]\n        },\n        {\n            \"type\": \"day\",\n            \"day\": \"tuesday\",\n            \"intervals\": [\n                {\n                    \"from\": \"09:00\",\n                    \"to\": \"12:00\"\n                },\n                {\n                    \"from\": \"14:00\",\n                    \"to\": \"15:00\"\n                }\n            ]\n        }\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/availability",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "availability"
+              ]
+            }
+          },
+          "response": [],
+          "uid": "21927355-ddbc4a83-7715-4d78-a567-7f4a1967ca7b"
+        },
+        {
+          "name": "Get Availability",
+          "id": "311c4a68-f996-42d2-aef2-dcd2a7a3b3d6",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/availability/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "availability",
+                "1"
+              ]
+            }
+          },
+          "response": [],
+          "uid": "21927355-311c4a68-f996-42d2-aef2-dcd2a7a3b3d6"
+        },
+        {
+          "name": "Find Overlap",
+          "id": "d8338bcc-3f48-46cc-b642-b5ced7989e2e",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/availability/overlap?user1=1&user2=2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "availability",
+                "overlap"
+              ],
+              "query": [
+                {
+                  "key": "user1",
+                  "value": "1"
+                },
+                {
+                  "key": "user2",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "uid": "21927355-d8338bcc-3f48-46cc-b642-b5ced7989e2e"
+        }
+      ]
+    }
+  }

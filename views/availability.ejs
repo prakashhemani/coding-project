@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Availability Overlap</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 80%;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      textarea {
+        width: 100%;
+        height: 150px;
+      }
+      .input-group {
+        margin-bottom: 20px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      pre {
+        background-color: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Set Availability and Find Overlap</h1>
+
+      <!-- User 1 Availability Input -->
+      <div class="input-group">
+        <label for="user1Availability"
+          ><strong>User 1 Availability (JSON Format)</strong></label
+        >
+        <textarea id="user1Availability">
+{
+        "userId": "user1",
+  "rule": [
+    { "type": "day", "day": "Monday", "intervals": [{ "from": "09:00", "to": "17:00" }] }
+  ]
+}</textarea
+        >
+        <button onclick="setAvailability('user1')">
+          Set User 1 Availability
+        </button>
+        <button onclick="getAvailability('user1')">
+          Get User 1 Availability
+        </button>
+      </div>
+
+      <!-- User 2 Availability Input -->
+      <div class="input-group">
+        <label for="user2Availability"
+          ><strong>User 2 Availability (JSON Format)</strong></label
+        >
+        <textarea id="user2Availability">
+{
+        "userId": "user2",
+  "rule": [
+    { "type": "day", "day": "Monday", "intervals": [{ "from": "13:00", "to": "18:00" }] }
+  ]
+}</textarea
+        >
+        <button onclick="setAvailability('user2')">
+          Set User 2 Availability
+        </button>
+        <button onclick="getAvailability('user2')">
+          Get User 2 Availability
+        </button>
+      </div>
+
+      <!-- Button to Find Overlap -->
+      <div class="input-group">
+        <button onclick="findOverlap()">Find Overlap</button>
+      </div>
+
+      <!-- Result Output -->
+      <div class="input-group">
+        <h2>Result</h2>
+        <h3>Overlap Result</h3>
+        <pre id="overlapResult"></pre>
+
+        <h3>User 1 Availability</h3>
+        <pre id="user1Result"></pre>
+
+        <h3>User 2 Availability</h3>
+        <pre id="user2Result"></pre>
+      </div>
+    </div>
+
+    <script>
+      let user1Availability = {
+        rule: [
+          {
+            type: "day",
+            day: "Monday",
+            intervals: [{ from: "09:00", to: "17:00" }],
+          },
+        ],
+      };
+      function setAvailability(user) {
+        const availability = document.getElementById(
+          `${user}Availability`
+        ).value;
+        fetch(`/api/v1/availability`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: availability,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(`Availability set for ${user}`);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      function getAvailability(user) {
+        fetch(`/api/v1/availability/${user}`, {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById(`${user}Result`).textContent =
+              JSON.stringify(data, null, 2);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      function findOverlap() {
+        fetch(`/api/v1/availability/overlap?user1=user1&user2=user2`, {
+          method: "GET",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("overlapResult").textContent =
+              JSON.stringify(data, null, 2);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
