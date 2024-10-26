@@ -1,5 +1,4 @@
 "use strict";
-const boom = require("@hapi/boom");
 const availabilityDAO = require("../../dao/availability");
 
 var availabilitySvc = {};
