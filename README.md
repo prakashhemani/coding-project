@@ -1,28 +1,30 @@
 # Assignment
-This assignment is developed using **Nodejs v18.18.0**
+This project provides a basic REST API for managing user availability and finding overlapping schedules, similar to Calendly. This assignment is developed using **Nodejs v18.18.0**
 
 ## Live Demo
-Use the link: [Live Demo Link](#) 
+Use the link: [Live Demo Link](http://3.111.30.50:8080/views/availability) 
 
 ## Steps
-To run the project, please use the following commands. Assuming Nodejs v18.18.0 is already installed. Server starts on port 8080.
+To set up and run the project locally, make sure Node.js v18.18.0 is installed. Then follow these steps: 
 ```
 1. npm install
 2. node index.js
 ```
+Server starts on **port 8080** by default
 
 To run the test cases
 ```
 1. npm test
 ```
 
-Please find the **postman collection** json in the file postman_collection.json
+
+Please find the **postman collection** json in file postman_collection.json
 
 ### Approach
-Went through calendly apis and payload and understood a user can set the availability according to
-- days 
-- Specific Date range 
-- Holidays
+The API is designed to handle basic availability and overlap checks. Inspired by the Calendly API structure, users can set availability for:
+- Days – Specifying timeslots for each day.
+- Date Ranges – Can be added as an extension.
+- Holidays – Can be added as an extension.
 
 ### Api endpoints
 - **POST /api/v1/availability** - To set availability of user
@@ -32,15 +34,15 @@ Went through calendly apis and payload and understood a user can set the availab
 ### Sample Payload
 ```
 {
-    "userId": 2,
-    "rule": [
+    "userId": 2,               // Unique identifier for the user
+    "rule": [                  // Availability rules for specific days
         {
-            "type": "day",
-            "day": "monday",
-            "intervals": [
+            "type": "day",     // Type of rule, here set for a weekday
+            "day": "monday",   // Day of the week
+            "intervals": [     // Time intervals user is available
                 {
-                    "from": "09:00",
-                    "to": "12:00"
+                    "from": "09:00",   // Start time
+                    "to": "12:00"      // End time
                 },
                 {
                     "from": "14:00",
@@ -49,7 +51,7 @@ Went through calendly apis and payload and understood a user can set the availab
             ]
         },
         {
-            "type": "day",
+            "type": "day",     // Another rule for a different day
             "day": "tuesday",
             "intervals": [
                 {
@@ -68,11 +70,10 @@ Went through calendly apis and payload and understood a user can set the availab
 
    
 ## Assumptions
-- Storing the data right now in memory.
-- Setting the user availability based on the day. Can be extended to accomadate date range and holidays.
-- While comparing the schedules for two users, checking the overalap based on the availabilty. Not taking into booked events/meeting for that particular user
-- Schedule comparison is being handled for local timezon
-- Need to add propoer data vaidation to check request payload
+- **In-memory Data Storage:** The current setup stores data in memory, which can be extended to use a database for persistence.
+- **Availability Comparison:** The system compares availability without considering other booked events, focusing solely on open slots.
+- **Timezone:** All comparisons are handled in the local timezone.
+- **Validation:** Basic data validation is implemented, though additional checks could improve robustness.
 
 
 
