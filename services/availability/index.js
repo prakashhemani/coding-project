@@ -4,6 +4,7 @@ const availabilityDAO = require("../../dao/availability");
 
 var availabilitySvc = {};
 
+// Get availability for a specific user
 availabilitySvc.getAvailability = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -21,6 +22,7 @@ availabilitySvc.getAvailability = async (req, res, next) => {
   }
 };
 
+// Add availability for a user
 availabilitySvc.addAvailability = async (req, res, next) => {
   try {
     const { userId, rule } = req.body;
@@ -35,6 +37,7 @@ availabilitySvc.addAvailability = async (req, res, next) => {
   }
 };
 
+// Find overlapping availability between two users
 availabilitySvc.findOverlap = async (req, res, next) => {
   try {
     const { user1, user2 } = req.query;
@@ -64,29 +67,20 @@ availabilitySvc.findOverlap = async (req, res, next) => {
   }
 };
 
+// Helper function to find overlapping availability
 function findOverlap(availRule1, availRule2) {
   console.log("avail rule 1 is ", availRule1);
   console.log("avail rule 2 is ", availRule2);
   let overlaps = [];
 
-  //first check based on the day
-  let user1DaywiseSlot = {};
-  let user1Slots = availRule1["rule"];
-  user1Slots.forEach((slot) => {
-    if (slot["type"] == "day") {
-      user1DaywiseSlot[slot["day"]] = slot["intervals"];
-    }
-  });
+  // Organize availability slots by day for each user
+  let user1DaywiseSlot = organizeDaywiseSlots(availRule1["rule"]);
+  let user2DaywiseSlot = organizeDaywiseSlots(availRule2["rule"]);
+
   console.log("user1 daywise slot is ", user1DaywiseSlot);
-  let user2DaywiseSlot = {};
-  let user2Slots = availRule2["rule"];
-  user2Slots.forEach((slot) => {
-    if (slot["type"] == "day") {
-      user2DaywiseSlot[slot["day"]] = slot["intervals"];
-    }
-  });
   console.log("user2 daywise slot is ", user2DaywiseSlot);
 
+  // Find overlaps for each day
   Object.keys(user1DaywiseSlot).forEach((day) => {
     console.log("day is ", day);
     const user1DayIntervals = user1DaywiseSlot[day];
@@ -94,30 +88,17 @@ function findOverlap(availRule1, availRule2) {
     console.log("user 1 interval for day is ", user1DayIntervals);
     console.log("user 2 interval for day is ", user2DayIntervals);
 
+    // Compare intervals and find overlaps
     user1DayIntervals?.forEach((interval1) => {
-      console.log("user 1 interval is ", interval1);
-
       user2DayIntervals?.forEach((interval2) => {
-        console.log("user 2 interval is ", interval2);
         const start =
           interval1.from > interval2.from ? interval1.from : interval2.from;
-        console.log("start is ", start);
         const end = interval1.to < interval2.to ? interval1.to : interval2.to;
-        console.log("end is ", end);
         if (start < end) {
           if (!overlaps[day]) {
-            overlaps[day] = [
-              {
-                from: start,
-                to: end,
-              },
-            ];
-          } else {
-            overlaps[day].push({
-              from: start,
-              to: end,
-            });
+            overlaps[day] = [];
           }
+          overlaps[day].push({ from: start, to: end });
         }
       });
     });
@@ -126,35 +107,15 @@ function findOverlap(availRule1, availRule2) {
   return overlaps;
 }
 
-let rule1 = {
-  rule: [
-    {
-      type: "day",
-      day: "monday",
-      intervals: [
-        {
-          from: "09:00",
-          to: "12:00",
-        }
-      ]
+// Helper function to organize slots by day
+function organizeDaywiseSlots(slots) {
+  let daywiseSlots = {};
+  slots.forEach((slot) => {
+    if (slot["type"] == "day") {
+      daywiseSlots[slot["day"]] = slot["intervals"];
     }
-  ]
-};
+  });
+  return daywiseSlots;
+}
 
-let rule2 = {
-    "rule": [
-        {
-            "type": "day",
-            "day": "monday",
-            "intervals": [
-                {
-                    "from": "10:00",
-                    "to": "14:00"
-                }
-            ]
-        }
-    ]
-};
-
-// findOverlap(rule1, rule2);
 module.exports = availabilitySvc;

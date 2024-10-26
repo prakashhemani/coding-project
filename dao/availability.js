@@ -1,4 +1,7 @@
+// Object to store availability-related data access methods
 let availabilityDAO = {};
+
+// In-memory storage for user availabilities
 var userAvailabilities = {};
 
 availabilityDAO.getAvailability = async function (userId) {
@@ -15,6 +18,7 @@ availabilityDAO.getAvailability = async function (userId) {
 
 availabilityDAO.addAvailability = async function (userId, availData) {
   try {
+    // Store the availability data with a 'rule' property
     userAvailabilities[userId] = {rule: availData};
     console.log("User availability is ", userAvailabilities);
     return userAvailabilities[userId];
@@ -24,4 +28,5 @@ availabilityDAO.addAvailability = async function (userId, availData) {
   }
 };
 
+// Export the availabilityDAO object for use in other modules
 module.exports = availabilityDAO;
