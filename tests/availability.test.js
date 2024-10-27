@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require('./../index');
+const app = require("./../index");
 
 const availabilityDAO = require("../dao/availability");
 
@@ -53,11 +53,13 @@ describe("Availability Service API", () => {
 
       const body = {
         userId: "123",
-        rule: {
-          type: "day",
-          day: "Monday",
-          intervals: [{ from: "09:00", to: "17:00" }],
-        },
+        rule: [
+          {
+            type: "day",
+            day: "Monday",
+            intervals: [{ from: "09:00", to: "17:00" }],
+          },
+        ],
       };
       const response = await request(app)
         .post("/api/v1/availability")
@@ -120,7 +122,9 @@ describe("Availability Service API", () => {
           },
         ],
       };
-      availabilityDAO.getAvailability.mockResolvedValueOnce(mockUser1Availability).mockResolvedValueOnce(mockUser2Availability);
+      availabilityDAO.getAvailability
+        .mockResolvedValueOnce(mockUser1Availability)
+        .mockResolvedValueOnce(mockUser2Availability);
 
       const response = await request(app).get(
         "/api/v1/availability/overlap?user1=123&user2=456"
