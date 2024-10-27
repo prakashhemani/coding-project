@@ -28,6 +28,10 @@ availabilitySvc.addAvailability = async (req, res, next) => {
     if (!userId || !rule) {
       return res.status(400).json({ message: "User ID and rule are required" });
     }
+      // Validate rule format
+      if (!isValidRule(rule)) {
+        return res.status(400).json({ message: "Invalid rule format" });
+      }
     await availabilityDAO.addAvailability(userId, rule);
     res.status(200).json({ message: `Availability set for user ${userId}` });
   } catch (error) {
@@ -65,6 +69,33 @@ availabilitySvc.findOverlap = async (req, res, next) => {
     return res.status(400).json(error);
   }
 };
+
+
+// Helper function to validate rule format
+function isValidRule(rule) {
+  if (!Array.isArray(rule)) {
+    return false;
+  }
+
+  const validDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+  return rule.every(slot => {
+    if (slot.type !== 'day' || !validDays.includes(slot.day.toLowerCase()) || !Array.isArray(slot.intervals)) {
+      return false;
+    }
+
+    return slot.intervals.every(interval => {
+      if (typeof interval.from !== 'string' || typeof interval.to !== 'string') {
+        return false;
+      }
+
+      const fromTime = new Date(`1970-01-01T${interval.from}`);
+      const toTime = new Date(`1970-01-01T${interval.to}`);
+
+      return !isNaN(fromTime.getTime()) && !isNaN(toTime.getTime()) && fromTime < toTime;
+    });
+  });
+}
 
 // Helper function to find overlapping availability
 function findOverlap(availRule1, availRule2) {

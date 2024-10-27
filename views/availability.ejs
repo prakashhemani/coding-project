@@ -99,19 +99,8 @@
     </div>
 
     <script>
-      let user1Availability = {
-        rule: [
-          {
-            type: "day",
-            day: "Monday",
-            intervals: [{ from: "09:00", to: "17:00" }],
-          },
-        ],
-      };
       function setAvailability(user) {
-        const availability = document.getElementById(
-          `${user}Availability`
-        ).value;
+        const availability = document.getElementById(`${user}Availability`).value;
         fetch(`/api/v1/availability`, {
           method: "POST",
           headers: {
@@ -119,12 +108,18 @@
           },
           body: availability,
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (!response.ok) {
+              return response.json().then(err => { throw err; });
+            }
+            return response.json();
+          })
           .then((data) => {
             alert(`Availability set for ${user}`);
           })
           .catch((error) => {
             console.error("Error:", error);
+            alert(`Error setting availability for ${user}: ${error.message || JSON.stringify(error)}`);
           });
       }
 
@@ -132,13 +127,20 @@
         fetch(`/api/v1/availability/${user}`, {
           method: "GET",
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (!response.ok) {
+              return response.json().then(err => { throw err; });
+            }
+            return response.json();
+          })
           .then((data) => {
             document.getElementById(`${user}Result`).textContent =
               JSON.stringify(data, null, 2);
           })
           .catch((error) => {
             console.error("Error:", error);
+            alert(`Error getting availability for ${user}: ${error.message || JSON.stringify(error)}`);
+            document.getElementById(`${user}Result`).textContent = "Error fetching data";
           });
       }
 
@@ -146,13 +148,20 @@
         fetch(`/api/v1/availability/overlap?user1=user1&user2=user2`, {
           method: "GET",
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (!response.ok) {
+              return response.json().then(err => { throw err; });
+            }
+            return response.json();
+          })
           .then((data) => {
             document.getElementById("overlapResult").textContent =
               JSON.stringify(data, null, 2);
           })
           .catch((error) => {
             console.error("Error:", error);
+            alert(`Error finding overlap: ${error.message || JSON.stringify(error)}`);
+            document.getElementById("overlapResult").textContent = "Error fetching overlap data";
           });
       }
     </script>
